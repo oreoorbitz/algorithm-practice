@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
+import { markdownPlugin } from './src/markdown-plugin.js'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -9,5 +10,5 @@ export default defineConfig({
     // Use next free port if 5174 happens to be taken.
     strictPort: false,
   },
-  plugins: [tailwindcss()],
+  plugins: [markdownPlugin(), tailwindcss()],
 })

@@ -4,3 +4,107 @@
 @plugin 'daisyui' {
   themes: dark --default;
 }
+
+/* --------------------------------------------------------------------------
+   Code blocks: make Prism's prism-tomorrow theme sit cleanly inside prose.
+   The theme sets its own background/colours; we just round it and add space.
+   -------------------------------------------------------------------------- */
+.prose pre {
+  border-radius: 0.75rem;
+  border: 1px solid var(--color-base-300);
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.prose pre code {
+  background: transparent;
+  padding: 0;
+  font-size: inherit;
+  /* Prism adds .token spans with colour; let them through untouched. */
+}
+
+/* Inline code stays subtle (typography plugin already styles it). */
+.prose :not(pre) > code {
+  border: 1px solid var(--color-base-300);
+}
+
+/* --------------------------------------------------------------------------
+   Mermaid diagrams: centered card with a soft background.
+   -------------------------------------------------------------------------- */
+.mermaid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1.75rem 0;
+  padding: 1.5rem;
+  background: var(--color-base-300);
+  border: 1px solid var(--color-base-300);
+  border-radius: 0.75rem;
+  overflow-x: auto;
+}
+
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* --------------------------------------------------------------------------
+   Callout boxes (rendered from `> **Tip:** ...` style blockquotes).
+   -------------------------------------------------------------------------- */
+.callout {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  margin: 1.5rem 0;
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.callout-icon {
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+  flex-shrink: 0;
+}
+
+.callout-body {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.callout-body strong {
+  color: inherit;
+}
+
+/* --------------------------------------------------------------------------
+   Table of contents: active-link highlight + hover.
+   -------------------------------------------------------------------------- */
+#toc-list a {
+  border-radius: 0.375rem;
+  transition: color 0.15s, background-color 0.15s;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#toc-list a:hover {
+  background-color: var(--color-base-300);
+}
+
+#toc-list a.toc-active {
+  /* color + font-weight applied via utility classes in JS; this is a fallback. */
+  border-left: 2px solid var(--color-primary);
+}
+
+/* --------------------------------------------------------------------------
+   Headings: leave room under the sticky navbar when anchor-jumping.
+   -------------------------------------------------------------------------- */
+.prose :is(h1, h2, h3, h4) {
+  scroll-margin-top: 5rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}

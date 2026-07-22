@@ -7,29 +7,58 @@
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body class="min-h-screen bg-base-200">
+    <!-- Scroll progress bar -->
+    <div
+      id="progress"
+      class="fixed left-0 top-0 z-20 h-0.5 w-full origin-left scale-x-0 bg-primary transition-transform duration-150 ease-out"
+    ></div>
+
     <div class="navbar bg-base-300/60 sticky top-0 z-10 border-b border-base-300 backdrop-blur">
-      <div class="mx-auto flex w-full max-w-4xl items-center gap-3 px-4">
+      <div class="mx-auto flex w-full max-w-7xl items-center gap-3 px-4">
         <span class="text-2xl">🧠</span>
         <div class="flex flex-col leading-tight">
           <span class="font-semibold">Algorithm Practice</span>
           <span class="text-xs text-base-content/60">
-            The Frontend Developer’s 20-Hour Plan
+            The Frontend Developer's 20-Hour Plan
           </span>
         </div>
+        <!-- reading-time + author count filled in by main.js -->
+        <div
+          id="meta"
+          class="ml-auto hidden text-xs text-base-content/50 sm:block"
+        ></div>
       </div>
     </div>
 
-    <main class="mx-auto max-w-4xl px-4 py-8 sm:py-12">
-      <article
-        id="plan"
-        class="prose prose-lg mx-auto max-w-none prose-headings:scroll-mt-20 prose-headings:font-semibold prose-h1:text-3xl prose-h1:mb-2 prose-h2:mt-12 prose-h2:border-b prose-h2:border-base-300 prose-h2:pb-1 prose-h2:text-2xl prose-h3:text-xl prose-strong:text-primary prose-code:before:hidden prose-code:after:hidden prose-code:rounded prose-code:bg-base-300 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-primary-content prose-a:text-primary"
-      >
-        <!-- marked output is injected here -->
-      </article>
-    </main>
+    <div class="mx-auto flex w-full max-w-7xl gap-8 px-4 py-8 sm:py-12">
+      <!-- Main content column -->
+      <main class="min-w-0 flex-1">
+        <article
+          id="plan"
+          class="prose prose-lg mx-auto max-w-none prose-headings:scroll-mt-20 prose-headings:font-semibold prose-h1:mb-2 prose-h1:text-4xl prose-h1:font-bold prose-h2:mt-14 prose-h2:border-b prose-h2:border-base-300 prose-h2:pb-2 prose-h2:text-2xl prose-h3:mt-8 prose-h3:text-xl prose-h4:text-lg prose-strong:text-primary-content prose-code:before:hidden prose-code:after:hidden prose-code:rounded prose-code:bg-base-300 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-primary prose-a:text-primary prose-table:overflow-hidden prose-th:bg-base-300 prose-th:text-sm prose-th:uppercase prose-th:tracking-wide prose-th:text-base-content/70 prose-blockquote:border-l-primary"
+        >
+          <!-- rendered markdown is injected here -->
+        </article>
+      </main>
+
+      <!-- Sticky right-rail Table of Contents (xl screens and up) -->
+      <aside class="hidden w-64 shrink-0 xl:block">
+        <nav id="toc" class="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto">
+          <p class="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-base-content/50">
+            On this page
+          </p>
+          <ul id="toc-list" class="menu menu-sm w-full border-l border-base-300 p-0">
+            <!-- TOC links injected here -->
+          </ul>
+        </nav>
+      </aside>
+    </div>
 
     <footer class="footer footer-center p-6 text-xs text-base-content/50">
-      Built with Vite + Tailwind + DaisyUI · <code>plan.md</code> rendered live
+      <div>
+        Built with Vite + Tailwind + DaisyUI · Prism + Mermaid ·
+        <code>plan.md</code> rendered live
+      </div>
     </footer>
 
     <script type="module" src="/src/main.js"></script>
