@@ -1,8 +1,9 @@
-# The Frontend Developer's Algorithmic Puzzle Plan — v2
+# The Frontend Developer's Algorithmic Puzzle Plan — v2.1
 
 > Original synthesis: Backhouse, Kaufman, Zeitz, Khamies, Knuth.
 > v2: updated with cross-verified research (10-dimension swarm, ~120 sources, Jul 2026).
-> Companion document: `algorithm-interview-resources.md` (full evidence + citations).
+> **v2.1: Toptal Codility track added** (5-dimension follow-up swarm: funnel, platform mechanics, candidate reports, practice curriculum, JS/AI rules).
+> Companion documents: `algorithm-interview-resources.md` (general evidence + citations), `research/toptal_codility_dim01–05.md` (Toptal evidence).
 
 You have a unique advantage: 7 years of professional experience. You already know how to build things, debug, and write clean code. LeetCode is **not** a test of your intelligence; it is a test of whether you know the "folklore" (patterns) of a very specific, slightly artificial game.
 
@@ -68,6 +69,7 @@ _Do this before Hour 1._
   - `techinterviewhandbook.org/grind75` — time-boxed problem scheduler
   - `github.com/yangshun/tech-interview-handbook` — cheatsheets + interview format guide
   - `github.com/SeanPrashad/leetcode-patterns` — the "if X → use pattern Y" cheat sheet
+  - **v2.1 (Toptal):** `app.codility.com/programmers/lessons` — 17 free graded lessons on the *actual assessment engine*; `app.codility.com/demo/take-sample-test/` — free unlimited demo test in the real environment
 - **The only course worth your hours:** ThePrimeagen, *The Last Algorithms Course You'll Need* — free, **TypeScript**, ~9h, interview-focused. Use it as the concept layer during Days 1–6 (watch the matching section before each sprint).
 - **Close:** YouTube recommendations, your IDE, and any paid platform trials. Premium tools have narrow windows of value — see Phase 4.
 
@@ -231,6 +233,66 @@ gantt
 - **Final 1–3 weeks before a specific company's loop:** buy **LeetCode Premium** ($35/mo) for company-tagged questions sorted by frequency; read recent Glassdoor/Blind reports for that exact team. Cancel after.
 - **Ask your recruiter two questions:** which assessment platform (HackerRank/CodeSignal/CoderPad — practice on that exact engine, since 60–80% of rejections happen at the OA stage), and what the AI-tooling policy is (Amazon disqualifies; Anthropic bans; Meta is piloting an AI-*enabled* round).
 
+## The Toptal Codility Track — NEW (v2.1)
+
+_If Toptal is a target, this section reshapes your drills. Evidence: 30+ searches across official Toptal/Codility docs and 8+ first-hand candidate reports spanning 2013–2026 — the format has been essentially unchanged for a decade, which makes it highly preppable._
+
+### The Funnel — know where you're standing
+
+| Stage | Format | Pass rate (official) |
+|-------|--------|----------------------|
+| 1. Language & personality screen | 10–45 min English call | 26.4% |
+| 2. **In-depth skill review = Codility** | **90 min, 3 algorithm tasks (easy → medium → hard)** | 7.4% |
+| 3. Live screening | 30–60 min live coding, 1–2 tasks | 3.6% |
+| 4. Test project | ~10–50 hrs over 1–3 weeks (frontend: typically React + Node SPA + demo) | 3.2% |
+| 5. Continued excellence | Ongoing | 3.0% |
+
+- The **English screen kills more candidates (73.6%) than any technical stage** — treat fluent, confident narration (which you're already training) as a first-class deliverable.
+- Fail the Codility stage → automated rejection email; retake after a waiting period (most-cited figure: **~6 months**, medium confidence — Toptal doesn't publish it). You get roughly one shot per half-year: **do not book the test until your simulation scores say you're ready** (see below).
+
+### The Test Itself — mechanics that change how you prep
+
+1. **3 tasks / 90 minutes, easy → medium → hard**, Big-O runtime constraints stated in the task. Confirmed by 8+ independent reports, 2013–2026.
+2. **Pass threshold ≈ 210/300 (~70%)** — NOT 100%. Two independent first-hand reports converge here; but **two perfect tasks alone (200) failed in 2022** — you need partial credit on the hard task. Plan to attempt all three.
+3. **Scoring is two-axis: Correctness + Performance.** A correct-but-slow solution gets partial credit (e.g., 100% correctness / 75% performance ≈ 88%). The expected worst-case complexity is **printed in the task spec** — meet it, don't guess it.
+4. **Environment: Node.js 18** (TypeScript 5.1.6 available), full ES6+/ES2022. You only implement `function solution(...)` — no stdin parsing. **No documented time-limit multiplier for JS** — assume the same wall-clock as compiled languages; avoid recursion on large N (V8 stack limits).
+5. **Custom test runs are free; submissions are final.** You can run your own inputs repeatedly — but one failed hidden edge case can sink a task's score. Codility's test categories are predictable: empty/minimal, edge, example, then medium/extreme performance tests.
+6. **Time management is the #1 reported failure mode** — candidates over-polish task 1 and starve task 3. Budget: ~20 min easy, ~30 min medium, ~40 min hard.
+
+### The Integrity Rules — what gets you flagged (2026)
+
+Codility logs: **paste events (with content), tab switches, task-description copying, abnormally fast completion, and typing-pattern anomalies (incl. retyped AI code)** — plus a Similarity Check against 12M+ submissions and known AI-generated answers. Flags go to human review with full keystroke playback of your session. Proctoring intensity is employer-configurable, so:
+
+- **DO:** type everything yourself in the IDE, run custom tests liberally, stay in the test tab, read the "Before You Begin" policy page for your specific invite.
+- **DON'T:** paste code from anywhere (even your own notes), switch tabs to look things up, or use an AI assistant — even if "Google is allowed" per older reports, pasting is tracked and retyped AI code is detected.
+- Practice solving **in the Codility lesson IDE itself** so the environment holds no surprises.
+
+### Your Codility Curriculum — mapped to your six sprints
+
+Codility's free lessons *are* the training pool — reported Toptal tasks (BinaryGap, CountDiv, Triangle, array split-points, string truncation, greedy min-cars, knight moves) come straight from lesson families.
+
+| Your sprint | Codility lessons (free) | Must-do tasks |
+|-------------|------------------------|---------------|
+| Hash Maps / counting | L2 Arrays, L4 Counting Elements | OddOccurrencesInArray, CyclicRotation, PermCheck, MaxCounters, MissingInteger |
+| Two Pointers | L15 Caterpillar Method | AbsDistinct, MinAbsSumOfTwo |
+| Sliding Window / monovariants | L5 Prefix Sums, L15 | PassingCars, GenomicRangeQuery, MinAvgTwoSlice, CountDiv |
+| **Binary Search** | L14 Binary Search Algorithm | MinMaxDivision, NailingPlanks |
+| Greedy (Toptal favorite) | L6 Sorting, L16 Greedy Algorithms | Triangle, MaxProductOfThree, TieRopes |
+| Math/number sense (Hard-task territory) | L8–L12 (Leader, Slices, Sieve, Euclidean) | EquiLeader, Dominator, CountNonDivisible, CommonPrimeDivisors |
+| DP (Hard-task territory) | L17 Dynamic Programming | NumberSolitaire, MinAbsSum |
+
+**Priority:** Lessons 1–5 (BinaryGap → MinAvgTwoSlice) are the overwhelmingly most-cited task pool — do these first, in the Codility IDE, in JavaScript.
+
+### Drill Protocol Changes for Toptal (Days 7–10)
+
+- **Replace two of your four 20-minute drill days with 90-minute simulations:** 3 tasks (1 easy, 1 medium, 1 hard from the lessons above), one sitting, no pause, in the Codility environment via the free demo test + lesson tasks. This is the single highest-fidelity prep artifact available.
+- **Per task, run this Codility-specific checklist before submitting:**
+  1. Does my complexity **match the printed expected complexity**? (If O(N log N) is stated and mine is O(N²), optimize or accept partial credit deliberately.)
+  2. Edge cases tested with custom runs: empty array, single element, all-equal, zeros, negatives, N = 1, N = max.
+  3. No `sort()` without `(a, b) => a - b`. No `shift()` in loops. No deep recursion on large N.
+- **Readiness gate for booking the real test:** two consecutive simulations at **≥ 240/300-equivalent** (two perfect tasks + solid partial credit on the hard, with the printed complexity met on easy and medium). Below that, keep drilling — the retake window is ~6 months.
+- **Keep the Redo Loop and external mocks** — Stages 3–4 (live coding + test project) are exactly what your narration training and frontend micro-track prepare you for.
+
 ## The Frontend Micro-Track — NEW (30 min, 2×/week, runs parallel to everything)
 
 Your seniority is the asset; DSA is the gate. Frontend loops in 2026 include machine-coding rounds this plan's sprints don't touch:
@@ -250,9 +312,11 @@ Your seniority is the asset; DSA is the gate. Frontend loops in 2026 include mac
 | 5 | 2h | Tree DFS | Max Depth, Invert Binary Tree, Same Tree |
 | 6 | 2h | Tree BFS + Backtracking | Level Order Traversal, Permutations, Combinations |
 | 7 | 2h | Timer drills + **first redo session** (Days 1–3 failures) | Grind 75 / NeetCode picks |
-| 8 | 2h | Timer drills + **external mock #1** | + 30 min frontend micro-track |
-| 9 | 2h | Timer drills + redo (Days 4–6 failures) | + 30 min frontend micro-track |
-| 10 | 2h | Timer drills + **external mock #2** | Full-protocol narrated run |
+| 8 | 2h | **90-min Codility simulation #1** (easy+medium+hard, lessons 1–5 pool, Codility IDE) + **external mock #1** | + 30 min frontend micro-track |
+| 9 | 2h | Timer drills + redo (Days 4–6 failures) + Codility lesson gaps | + 30 min frontend micro-track |
+| 10 | 2h | **90-min Codility simulation #2** (scored against the 240/300 readiness gate) + **external mock #2** | Full-protocol narrated run |
+
+> **If Toptal is the target:** Days 8 and 10 use the Codility-specific checklist (printed complexity met, edge cases custom-tested, no `sort()` traps). Don't book the real test until two consecutive simulations hit the readiness gate — retakes are ~6 months apart.
 
 **Daily ritual (every day):** watch the matching ThePrimeagen section → run the 8-step protocol (+ Step 9) on every problem → narrate out loud → log failures to the Redo List.
 
