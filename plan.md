@@ -1,133 +1,116 @@
-# The Frontend Developer's 20-Hour Algorithmic Puzzle Plan
+# The Frontend Developer's Algorithmic Puzzle Plan — v2
 
-> Synthesizing Backhouse, Kaufman, Zeitz, Khamies, and Knuth for LeetCode success.
+> Original synthesis: Backhouse, Kaufman, Zeitz, Khamies, Knuth.
+> v2: updated with cross-verified research (10-dimension swarm, ~120 sources, Jul 2026).
+> Companion document: `algorithm-interview-resources.md` (full evidence + citations).
 
 You have a unique advantage: 7 years of professional experience. You already know how to build things, debug, and write clean code. LeetCode is **not** a test of your intelligence; it is a test of whether you know the "folklore" (patterns) of a very specific, slightly artificial game.
 
-## The Five Authors
+## What Changed in v2 (Read This First)
 
-This plan synthesizes five texts into a single, cohesive execution strategy:
+Research validated the plan's core architecture — pattern-first learning, a repeatable protocol, time-boxed drills, narration, skipping Hards. Four structural updates:
 
-- **Kaufman** _(The First 20 Hours)_ provides the **engine**: deconstruct the skill, define the target, use a timer, prioritize quantity over perfection, and commit to exactly 20 hours.
-- **Zeitz** _(The Art and Craft of Problem Solving)_ provides the **strategy**: how to investigate a mystery. Treat LeetCode problems as "Problems" (requiring investigation), not "Exercises" (requiring rote calculation). Get oriented, find the penultimate step, and use tactical lenses.
-- **Backhouse** provides the **logic**: how to guarantee your code works without guessing. Use "Invariants" (what stays the same when variables change) to construct loops and pointers with mathematical certainty.
-- **Khamies** _(How to Solve Algorithm Problems)_ provides the **protocol**: a repeatable 8-step interview script and the FGCC study framework for converting solved problems into reusable templates. He names what interviewers actually grade.
-- **Knuth** _(The Art of Computer Programming, Vol. 1)_ provides the **discipline**: his exercise-rating system calibrates which problems are worth your 20 hours, his "see it to believe it" tracing mandate, and his five-feature definition of an algorithm as a pre-code checklist.
+1. **20 hours buys pattern literacy, not readiness.** Consensus time-to-ready for experienced devs is 40–100h. This plan is now explicitly **Phase 1** — with a Phase 2 continuation loop defined at the end.
+2. **Two practices added** — the two most-endorsed non-solving habits the original lacked: a **spaced-repetition redo loop** and **external mock interviews**.
+3. **Communication re-framed.** interviewing.io's 100K-interview dataset: Code & Solve drive advance decisions ~3–6× more than Communication. Narration is a **gate** (silence = strong no-hire), not a lever. Correct-first, narrated-always.
+4. **Khamies demoted, better authorities installed.** The book is real but self-published and low-authority; its "communication is the #1 factor" claim is contradicted by data. The protocol itself is corroborated — kept, but now anchored to *Beyond Cracking the Coding Interview* (2025) and the Tech Interview Handbook.
+
+## The Intellectual Foundation (Verified)
+
+| Author | Role in this plan | Verification |
+|--------|-------------------|--------------|
+| **Kaufman** _(The First 20 Hours)_ | The **engine**: deconstruct, timer, 20-hour commitment, frustration barrier | ✅ Confirmed — schedule scaffolding only, zero algorithm content |
+| **Zeitz** _(The Art and Craft of Problem Solving)_ | The **strategy**: investigate before acting; penultimate step; extreme principle; pigeonhole; symmetry | ✅ Confirmed — every attributed concept verified in the book |
+| **Backhouse** _(Algorithmic Problem Solving)_ | The **logic**: invariants — prove your loops, don't guess | ✅ Confirmed — invariants are literally the book's central theme |
+| **Khamies** _(How to Solve Algorithm Problems)_ | The **protocol**: 8-step interview script (corroborated; keep it) | ⚠️ Partially — real but self-published; "FGCC" expansion unverifiable; communication-#1 claim refuted by data. **Protocol anchored instead to Beyond CTCI + Tech Interview Handbook** |
+| **Knuth** _(TAOCP Vol. 1)_ | The **discipline**: difficulty scale, tracing mandate, five features | ✅ Confirmed verbatim from §1.1 and front matter |
+
+**New authorities added by research:**
+
+- **NeetCode** (Navdeep Singh, ex-Google) — free video walkthroughs; the community-default curriculum.
+- **Yangshun Tay** (ex-Meta Staff; Blind 75 / Grind 75 / Tech Interview Handbook) — the most-cited single practitioner voice in interview prep.
+- **interviewing.io** — the only large-N dataset (100K+ interviews) on what actually predicts passing.
 
 ## The Roadmap at a Glance
 
 ```mermaid
 graph LR
-  P0[Phase 0<br/>Setup] --> P1[Phase 1<br/>Zeitz Investigation]
+  P0[Phase 0<br/>Setup + JS Pitfalls] --> P1[Phase 1<br/>Zeitz Investigation]
   P1 --> P15[Phase 1.5<br/>8-Step Protocol]
-  P15 --> P2[Phase 2<br/>5 Pattern Sprints]
-  P2 --> P3[Phase 3<br/>Timer Drills]
-  P3 --> P35[Phase 3.5<br/>FGCC + Knuth Scale]
+  P15 --> P2[Phase 2<br/>6 Pattern Sprints]
+  P2 --> P3[Phase 3<br/>Timer Drills + Mocks]
+  P3 --> P4[Phase 4<br/>Continuation Loop]
 
   style P0 fill:#1e3a5f,stroke:#3b82f6,color:#fff
   style P1 fill:#1e3a5f,stroke:#3b82f6,color:#fff
   style P15 fill:#1e3a5f,stroke:#3b82f6,color:#fff
   style P2 fill:#14532d,stroke:#22c55e,color:#fff
   style P3 fill:#713f12,stroke:#eab308,color:#fff
-  style P35 fill:#713f12,stroke:#eab308,color:#fff
+  style P4 fill:#7c2d12,stroke:#f97316,color:#fff
 ```
 
-## Phase 0: The Kaufman Setup
+## Phase 0: The Setup
 
 _Do this before Hour 1._
 
 ### 1. Define Your Target Performance Level
 
-You are not trying to become a computer scientist. You are trying to **pass an interview**.
+> **Target (unchanged):** "I can identify the core LeetCode patterns. When I see an Easy/Medium problem, I can classify it within 3 minutes, apply the template, and write working JavaScript in 15 minutes — while narrating."
 
-> **Target:** "I can identify the 4 core LeetCode patterns. When I see an Easy/Medium problem, I can classify it within 3 minutes, apply the template, and write working JavaScript in 15 minutes."
+**Research nuance:** NeetCode's readiness rule for Phase 2 is stricter — solve an *unseen Medium in 20–25 minutes*. That's the graduation bar for the continuation loop, not this sprint.
 
-### 2. Eliminate Barriers
+### 2. Eliminate Barriers — and Spend $0
 
-- **Language:** Use JavaScript or TypeScript. Do **not** use Python — learning new syntax is friction.
-- **Environment:** Bookmark `leetcode.com`. Close YouTube. Close your IDE. You only need the browser.
+- **Language:** JavaScript or TypeScript. Validated twice over: learning new syntax is friction, and Meta/Amazon frontend loops run *in JavaScript anyway*.
+- **The free stack (bookmark these):**
+  - `neetcode.io` — roadmap + free video per problem
+  - `leetcode.com` — execution engine (free tier is enough)
+  - `techinterviewhandbook.org/grind75` — time-boxed problem scheduler
+  - `github.com/yangshun/tech-interview-handbook` — cheatsheets + interview format guide
+  - `github.com/SeanPrashad/leetcode-patterns` — the "if X → use pattern Y" cheat sheet
+- **The only course worth your hours:** ThePrimeagen, *The Last Algorithms Course You'll Need* — free, **TypeScript**, ~9h, interview-focused. Use it as the concept layer during Days 1–6 (watch the matching section before each sprint).
+- **Close:** YouTube recommendations, your IDE, and any paid platform trials. Premium tools have narrow windows of value — see Phase 4.
 
-### 3. Embrace the Frustration Barrier
+### 3. Learn the Three JavaScript Traps First
 
-Kaufman warns that the first hours will feel awful. Zeitz says the problem solver "gets lost." Expect to feel stupid — this is not a lack of ability; it is the friction of loading new patterns into your brain.
+These silently cost interviewers' confidence when a senior dev trips on them:
 
-> **Key Idea:** Khamies adds a sharper diagnosis: you can grind for months, skip weekends, and still fail — not from lack of effort, but from **lack of effectiveness**. The fix is not more hours; it is a systematic approach plus focus on problems that matter for the role.
+1. **`sort()` compares as strings by default.** `[10, 9, 80].sort()` → `[10, 80, 9]`. Always pass a comparator: `.sort((a, b) => a - b)`. And it mutates in place.
+2. **No native heap / priority queue.** Either say _"assume a PriorityQueue class"_ (acceptable in most interviews) or implement a minimal one once and keep it in your template file.
+3. **`shift()` / `unshift()` / `splice()` are O(n).** Using them inside a loop quietly turns it quadratic. Use an index pointer instead of `shift()` in BFS.
+
+### 4. Embrace the Frustration Barrier
+
+Kaufman warns the first hours feel awful; Zeitz says the solver "gets lost." Expect to feel stupid — it is the friction of loading new patterns, not a lack of ability.
 
 ## Phase 1: The Zeitz Investigation
 
 _Goal: Stop reading prompts like a user; start reading them like a detective. (Hours 1–3)_
 
-Zeitz argues that beginners fail because they don't investigate before acting. Before you write any code, execute these strategies.
+Unchanged from v1 — research found nothing better:
 
-### Strategy 1: Orientation — "What is this?"
-
-When you read a LeetCode problem, answer these questions **out loud** (literally, speak to your screen):
-
-- **What is the input?** Array of integers? String? Binary tree?
-- **What is the output?** A single number? A boolean? A modified array?
-- **What are the constraints?** Is the array sorted? Are there negative numbers? What is the length?
-
-> **Tip:** This is exactly like reading a Jira ticket. Don't write CSS until you know if it's mobile or desktop.
-
-### Strategy 2: The Penultimate Step
-
-Zeitz asks: _"What would the step right before the end look like?"_
-
-- **Problem:** "Find the max profit from buying and selling a stock."
-- **Penultimate thought:** "To know the max profit, I need to know the lowest price before the highest price."
-- **Action:** This instantly tells you that you need to track a `minPrice` variable as you iterate.
-
-### Strategy 3: Get Your Hands Dirty
-
-Zeitz demands you experiment. LeetCode gives you examples — **do not skip them**. Manually trace Example 1 and Example 2 on scratch paper. Write down the array. Draw arrows. Cross out numbers.
-
-> **Key Idea:** Knuth's corollary is absolute: _"An algorithm must be seen to be believed, and the best way to learn what an algorithm is all about is to try it."_ Before you type a single line, dry-run the examples on paper and predict the output. If you can't predict it by hand, you don't understand it well enough to code it.
+- **Orientation:** input? output? constraints? Say them **out loud**. The word "sorted" is the difference between `O(n)` and `O(log n)`.
+- **Penultimate step:** _"What would the step right before the end look like?"_
+- **Get your hands dirty:** manually trace both given examples on paper before typing. Knuth's corollary: _"An algorithm must be seen to be believed."_
 
 ## Phase 1.5: The 8-Step Interview Protocol
 
-_Goal: Turn the investigation into a repeatable script. This is what separates a candidate who "tries to solve" from one who systematically solves._
+_Unchanged — corroborated by multiple independent sources. Run it in order, every time:_
 
-Run this protocol **in order, every time**:
+1. **Understand** — read carefully; every word matters.
+2. **Formalize** — "Given X, return Y."
+3. **Repeat the question to yourself** — hidden info lives between the lines.
+4. **Bring three examples** — empty case, medium case, corner case.
+5. **Brute force** — correctness first, efficiency never.
+6. **Analyze complexity out loud** — time and space.
+7. **Optimize** — find the bottleneck line; remove it.
+8. **Re-analyze** — confirm the improvement.
 
-```mermaid
-graph TD
-  S1[1. Understand] --> S2[2. Formalize]
-  S2 --> S3[3. Repeat question]
-  S3 --> S4[4. Bring 3 examples]
-  S4 --> S5[5. Brute force]
-  S5 --> S6[6. Analyze complexity]
-  S6 --> S7[7. Optimize]
-  S7 --> S8[8. Re-analyze]
+> **v2 addition — Step 9 (the 2026 step): Explain and defend.** Because of LLM-era interview changes, expect follow-ups even after accepted code: _"Why does this work?" "What input breaks it?" "Walk me through line 5."_ Practice answering these during every drill. Interviewers now grade verification, not just solutions.
 
-  style S1 fill:#1e3a5f,stroke:#3b82f6,color:#fff
-  style S2 fill:#1e3a5f,stroke:#3b82f6,color:#fff
-  style S3 fill:#1e3a5f,stroke:#3b82f6,color:#fff
-  style S4 fill:#1e3a5f,stroke:#3b82f6,color:#fff
-  style S5 fill:#14532d,stroke:#22c55e,color:#fff
-  style S6 fill:#713f12,stroke:#eab308,color:#fff
-  style S7 fill:#14532d,stroke:#22c55e,color:#fff
-  style S8 fill:#713f12,stroke:#eab308,color:#fff
-```
+## Phase 2: The Backhouse Logic — Six Pattern Sprints
 
-1. **Understand the problem** — Read carefully. Pay attention to every word. _"Reading the question is half of the answer."_
-2. **Formalize the problem** — Restate it as a single input → output question: _"Given X, return Y."_
-3. **Repeat the question to yourself** — Hidden information lives between the lines. The word "sorted" in a binary-search prompt is the difference between `O(n)` and `O(log n)`.
-4. **Bring three examples** — not one. Each serves a purpose:
-   - An **empty-case** input (empty array, empty string, null) — tests edge handling.
-   - A **medium-case** input — exercises the general flow.
-   - A **corner-case** input (duplicates when unique is expected, negatives when positives are assumed) — exposes assumptions.
-5. **Develop a brute-force solution** — Quick and dirty. Correctness first, efficiency never. Just get something that works.
-6. **Analyze its complexity** — State the time and space complexity **out loud**. This tells the interviewer you can reason about cost, and it sets up the next step.
-7. **Optimize** — Go line-by-line through the brute force and find the bottleneck (the operation whose time complexity dominates). Remove it. This step is the literal difference between a beginner and an experienced candidate.
-8. **Re-analyze the optimized complexity** — Confirm the improvement. If you reach this step, you have passed the technical bar.
-
-> **Tip:** This is your code-review and debugging reflex applied to yourself in real time. Step 7 is exactly how you profile a slow React render — find the expensive operation, eliminate it.
-
-## Phase 2: The Backhouse Logic
-
-_Goal: Stop guessing at for-loop conditions. Start using Invariants. (Hours 4–15)_
-
-Backhouse teaches that an algorithm is just a series of state changes. An **Invariant** is a condition that remains true from the start of your loop to the end. If you define the invariant first, the code writes itself.
+_Goal: Stop guessing at for-loop conditions. Start using invariants. (Hours 4–14)_
 
 ### Which Pattern Do I Use?
 
@@ -135,209 +118,155 @@ Backhouse teaches that an algorithm is just a series of state changes. An **Inva
 graph TD
   Q[Read the problem] --> Q1{Find a pair,<br/>duplicate, or<br/>frequency?}
   Q1 -->|Yes| HM[Hash Map]
-  Q1 -->|No, but sorted<br/>or extremes| Q2{Need to find<br/>or compare from<br/>both ends?}
+  Q1 -->|No| Q0{Sorted array<br/>or "find in O log n"?}
+  Q0 -->|Yes| BS[Binary Search]
+  Q0 -->|No, sorted<br/>or extremes| Q2{Compare from<br/>both ends?}
   Q2 -->|Yes| TP[Two Pointers]
-  Q2 -->|No| Q3{Find the best<br/>contiguous range<br/>or subarray?}
+  Q2 -->|No| Q3{Best contiguous<br/>range/subarray?}
   Q3 -->|Yes| SW[Sliding Window]
   Q3 -->|No, recursive<br/>structure| Q4{Tree / nested<br/>data?}
   Q4 -->|Yes| TR[Tree DFS / BFS]
-  Q4 -->|Find ALL combos<br/>permutations| BT[Backtracking]
+  Q4 -->|"Find ALL combos<br/>permutations subsets"| BT[Backtracking]
 
   style HM fill:#14532d,stroke:#22c55e,color:#fff
+  style BS fill:#14532d,stroke:#22c55e,color:#fff
   style TP fill:#14532d,stroke:#22c55e,color:#fff
   style SW fill:#14532d,stroke:#22c55e,color:#fff
   style TR fill:#14532d,stroke:#22c55e,color:#fff
   style BT fill:#14532d,stroke:#22c55e,color:#fff
 ```
 
-### Sprint 1: Hash Maps — The Pigeonhole Tactic
+**Sprints 1–5 unchanged** (Hash Maps · Two Pointers · Sliding Window · Trees · Backtracking) — same Zeitz concepts, same Backhouse invariants, same universal backtracking template from v1.
 
-- **Zeitz Concept:** The Pigeonhole Principle. _"If I need to find a pair, a duplicate, or a frequency, I need a Hash Map."_
-- **Problems:** Two Sum, Valid Anagram, Group Anagrams.
-- **The Backhouse Invariant:** _"The Hash Map always contains the exact frequency/state of all elements we have looked at so far."_
-- **Execution:** You don't guess. Declare the map → iterate → update the map → check the map → done.
+### Sprint 6: Binary Search — NEW (highest frequency-per-hour you were missing)
 
-### Sprint 2: Two Pointers — The Extreme Principle
+- **Why added:** the validated 16-pattern taxonomy puts binary search (incl. "modified binary search") at interview-frequency parity with your five patterns; cost is only 2–3 problems.
+- **Zeitz Concept:** Monovariant in disguise — the search space only shrinks.
+- **Problems:** Binary Search, Search in Rotated Sorted Array, (stretch) Koko Eating Bananas.
+- **The Backhouse Invariant:** _"The answer, if it exists, is always inside `[lo, hi]`."_ Every iteration must shrink the interval while preserving that truth — this is what kills off-by-one bugs.
+- **Execution:** Decide `while (lo <= hi)` vs `while (lo < hi)` **from the invariant**, not from memory. Binary search is also a *template* beyond sorted arrays: "search on the answer space" (min capacity, min speed).
 
-- **Zeitz Concept:** The Extreme Principle — look at the biggest, smallest, leftmost, or rightmost things first.
-- **Problems:** Valid Palindrome, Container With Most Water.
-- **The Backhouse Invariant:** _"The area between the pointers is currently the maximum possible area for all pairs we have eliminated."_
-- **Execution:** Why move the shorter pointer in Container With Most Water? Because moving the taller one can only decrease the area. This is pure Backhouse logic — we **prove** which pointer to move, we don't guess.
+## Phase 3: Execution — Timer Drills + The Two Practices v1 Missed
 
-### Sprint 3: Sliding Window — Monovariants
+_Goal: Speed, spoken delivery, and retention. (Hours 15–20)_
 
-- **Backhouse Concept:** A **Monovariant** is something that only moves in one direction.
-- **Problems:** Best Time to Buy and Sell Stock, Maximum Subarray.
-- **The Backhouse Invariant:** _"The current window is the largest valid window ending at index `right`."_
-- **Execution:** The `right` pointer only moves forward (monovariant). The `left` pointer only moves forward to shrink the window when the invariant is broken.
+### The 20-Minute Timer Drill (kept, one rule amended)
 
-### Sprint 4: Trees — Symmetry
+1. Pick a problem from **Grind 75** (set: 2h/day, Easy+Medium, your six topics) or the first six categories of the **NeetCode 150 roadmap**.
+2. Physical timer: **20 minutes.**
+3. Zeitz (3 min orientation) → Backhouse (define invariant) → code → **Step 9: explain and defend your solution out loud**.
+4. Timer rings, not done? **STOP.** Watch the NeetCode video or read the solution. Understand it. Close it.
+5. **AMENDED v1 rule:** do **not** just move on. Add the problem to your **Redo List** (below). Reading solutions you never re-implement teaches half; re-implementing from memory teaches everything.
 
-- **Zeitz Concept:** Look for symmetry. A tree is perfectly symmetrical recursion.
-- **Problems:** Max Depth of Binary Tree, Invert Binary Tree.
-- **The Frontend Connection:** A tree is just a nested JSON object, or the DOM. `node.left` is `element.firstChild`.
-- **The Backhouse Invariant:** _"My recursive function correctly calculates the depth of the subtree rooted at the current node."_
-- **Execution:** Base case first (`if (!node) return 0`). Then trust the recursion (`1 + Math.max(left, right)`).
+### NEW — The Redo Loop (Spaced Repetition)
 
-> **Key Idea:** Knuth's depth — traversal is the foundation here. Inorder, preorder, and postorder are just three orderings of the same "visit" operation. Every tree DFS problem is a traversal with a custom `visit`.
+The most unanimously endorsed retention practice in the research:
 
-### Sprint 5: Backtracking — The "Find All..." Pattern
+- Keep a running **Redo List** of every problem you failed, timed out on, or solved shakily.
+- **Re-solve from memory after 2–5 days, then again after 1–2 weeks.** No peeking. If you fail the redo, it stays on the list.
+- A green "Success" bar from memory is worth three from fresh exposure.
+- This replaces v1's pure "Quantity over Quality" rule: quantity builds exposure, **redo builds retrieval** — and retrieval is what interviews test.
 
-- **Khamies Concept (FGCC):** When a problem says _"Find all the combinations / permutations / subsets / paths,"_ it is a backtracking problem. It is DFS applied to non-graph data, with a constraint that prunes the search.
-- **Problems:** Permutations, Combinations, Letter Combinations of a Phone Number.
+### NEW — External Spoken Practice
 
-**The Backhouse Invariant** — three components define every backtracking solution:
+Self-narration to your screen is necessary but doesn't simulate a human pushing back. Minimum effective dose:
 
-1. **Goal** (base condition): when to stop and record a result.
-2. **Constraints:** what paths to reject.
-3. **Options:** what to choose at each step.
+- **Days 8 and 10:** one external mock each. Free options: **Exponent Practice** (5 free peer credits/month) or **interviewing.io's free AI interviewer**. Have the mock partner interrupt you with "why?" and "what breaks this?" — that is the 2026 interview.
+- **Before any real high-stakes loop (Phase 4):** 1–2 paid **interviewing.io** sessions ($179–$339) with vetted FAANG seniors — the calibration gold standard. Their data: top-5% mock performers are 3× more likely to pass real loops.
 
-**The universal template** (Khamies) — commit it to memory:
+### Talk Out Loud — Re-framed by Data
 
-```js
-function dfs(collection, path, result) {
-  if (/* stop condition */) {
-    result.push([...path]); // copy the path — mutation must not leak
-    return;
-  }
-  for (const item of collection) {
-    // choose → explore → (path is copied, so "unchoose" is automatic)
-    dfs(/* remaining options */, [...path, item], result);
-  }
-}
-```
+| Factor | Weight (per interviewing.io's 100K-interview data) |
+|--------|-----------------------------------------------------|
+| **Code correctness** | Dominant — drives advance decisions ~3–6× more than communication |
+| **Problem solving** (clarify, decompose, handle hints) | Dominant — tied with correctness |
+| **Communication** | A **gate**, not a lever: silence/unverbalized thinking ≈ strong no-hire; above the narration threshold, it stops differentiating |
+| Testing / edge cases | Explicitly graded (Google & Meta rubrics) |
 
-- **Execution:** Recognize the "find all..." phrasing (**F**ocus), group these problems together (**G**roup), and reuse this one template for all of them (**C**onvert).
+**Behavioral translation:** always narrate (it's cheap and disqualifying to skip), but never expect narration to compensate for a wrong solution. Correct-first, narrated-always.
 
-## Phase 3: The Kaufman Execution
+## Phase 3.5: Template Compounding (FGCC, kept with a caveat)
 
-_Goal: Build speed and overcome the fear of failure. (Hours 16–20)_
+The FGCC loop (Focus → Group → Convert → Communicate) remains a good meta-habit — the acronym's exact expansion is unverifiable, but the behavior it describes is independently endorsed:
 
-### The "Quantity over Quality" Rule
+- **Focus:** name the pattern family while solving.
+- **Group:** file each problem with its siblings.
+- **Convert:** distill each group to **one code template** (your warm-start baseline).
+- **Communicate:** explain the pattern out loud or in writing — teaching exposes the holes.
 
-Zeitz and Kaufman both agree: do **not** try to write elegant, perfectly refactored code.
+### Knuth's Difficulty Scale (unchanged — exactly right for this constraint)
 
-- Use `let` freely.
-- Use `break` statements.
-- Write ugly, imperative `for` loops.
-- Your only goal is to make the green **"Success"** bar appear.
+| Rating | LeetCode analog | Your action |
+|--------|-----------------|-------------|
+| `00` | Trivial | Skip |
+| `10` | Easy, pattern known | Drill for fluency |
+| `20` | Medium, pattern known | **The core of your hours** |
+| `30` | Hard Medium | Time-box, then study solution + redo list |
+| `40`–`50` | Hard / research | **Never touch in this sprint** |
 
-### The 20-Minute Timer Drill
+### Pre-Code Checklist — Knuth's Five Features (unchanged)
 
-For the final 5 hours, do timed mock interviews:
+Finite · Definite · Input · Output · Effective. If any fails, your design isn't finished — keep thinking.
 
-1. Pick a random Easy/Medium from the "Top Interview 150" list.
-2. Set a physical timer for **20 minutes**.
-3. Apply Zeitz (3 mins orientation) → Backhouse (define invariant) → code.
-4. **CRITICAL Kaufman Rule:** If the timer goes off and you aren't done, **STOP**. Look at the solution. Read it. Understand it. Close it. Start a new problem.
+## Phase 4: The Continuation Loop — NEW
 
-> **Key Idea:** Knuth sharpens this rule: _"Do not turn to the answer until you have made a genuine effort to solve the problem by yourself."_ When the timer ends and you read the solution, you have **earned** it. You attempted, you hit the wall, and now the pattern will stick. Reading solutions you never attempted teaches nothing; reading solutions after genuine struggle teaches everything.
-
-### Talk Out Loud — Khamies's #1 Factor
-
-Of the eight factors interviewers actually grade, Khamies ranks **communication** as "by far the most important":
-
-| # | Factor | Why it matters |
-|---|--------|----------------|
-| 1 | Communication | A flawed solution narrated well often passes |
-| 2 | Algorithm/data-structure knowledge | Can you optimize past brute force? |
-| 3 | Problem-solving skills | Do you clarify before coding? |
-| 4 | Attention to detail | Did you catch the word "sorted"? |
-| 5 | Code efficiency | Right data structure for the job |
-| 6 | Complexity analysis | State the Big-O, out loud |
-| 7 | Modular code | Break it into functions |
-| 8 | Debugging | Fix your own bugs before they ask |
-
-A perfect silent solution can still fail; a flawed solution, narrated well, often passes. During every timed drill: **narrate**. Restate the problem. State your brute force. State its complexity. State your optimization and why.
-
-## Phase 3.5: The FGCC Study Loop + Knuth's Difficulty Scale
-
-_Goal: Make every solved problem compound. Solving 50 problems is useless if they don't generalize into reusable templates._
-
-### The FGCC Loop (Khamies)
-
-Run this continuously across the plan:
-
-- **F — Focus:** While solving, actively notice the pattern. Ask _"what family does this belong to?"_
-- **G — Group:** File the problem with its siblings (Two Sum ↔ Valid Anagram; Permutations ↔ Combinations).
-- **C — Convert:** Distill each group down to **one code template**. The template is your warm-start baseline; a new problem is just fine-tuning it.
-- **C — Communicate:** Explain the pattern out loud, in writing, or to another person. Teaching is the fastest way to find the holes in your own understanding.
-
-> **Tip:** Khamies's analogy — you don't train GPT from scratch; you fine-tune a baseline. Your templates are the baseline; each new problem is a fine-tune.
-
-### Knuth's Difficulty Scale
-
-Knuth rates every exercise **00–50**. Borrow this scale for LeetCode problem selection:
-
-| Rating | Meaning | LeetCode analog | Your action |
-|--------|---------|-----------------|-------------|
-| `00` | Immediate | Trivial | Skip — not worth your time |
-| `10` | ~1 minute | Easy, pattern known | **Drill these for fluency** |
-| `20` | ~15 minutes | Medium, pattern known | **The core of your 20 hours** |
-| `30` | 2+ hours | Hard Medium | Stretch goal — time-box, then study solution |
-| `40` | Term project | Hard | Avoid during this sprint |
-| `50` | Research problem | Unsolved | **Never touch** |
-
-> **Warning:** Knuth himself marks the hardest material with an asterisk and says to skip it on first reading. Life is too short, and interviews don't ask research problems.
-
-### Pre-Code Checklist — Knuth's Five Features
-
-Before you type, run this 5-second gut check:
-
-- **Finite** — does it terminate?
-- **Definite** — is every step unambiguous?
-- **Input** — does it take the right inputs?
-- **Output** — does it produce the right outputs?
-- **Effective** — is every operation doable by hand?
-
-If yes on all five, code with confidence. If not, your design isn't finished — **keep thinking**.
-
-## Daily Checklist — A 10-Day Schedule
-
-_Aim for ~2 hours a day. Total = 20 hours._
+_The honest upgrade: 20 hours is Phase 1. Here's what Phase 2 looks like if interviews are real._
 
 ```mermaid
 gantt
-  title The 20-Hour Roadmap
+  title Phase 1 → Phase 2
   dateFormat X
   axisFormat %s
-  section Patterns
-  Day 1 — Hash Maps          :done, d1, 0, 1
-  Day 2 — Two Pointers       :d2, 1, 2
-  Day 3 — Monovariants       :d3, 2, 3
-  Day 4 — Sliding Window     :d4, 3, 4
-  Day 5 — Tree DFS           :d5, 4, 5
-  Day 6 — Tree BFS + Backtrack :d6, 5, 6
-  section Execution
-  Day 7 — Timer Drill        :active, d7, 6, 7
-  Day 8 — Timer Drill        :d8, 7, 8
-  Day 9 — Timer Drill        :d9, 8, 9
-  Day 10 — Timer Drill       :crit, d10, 9, 10
+  section Phase 1 (this plan)
+  Days 1–6 — 6 pattern sprints     :done, a1, 0, 6
+  Days 7–10 — drills + 2 mocks     :active, a2, 6, 10
+  section Phase 2 (weeks 3–8)
+  NeetCode 150 remainder           :b1, 10, 30
+  Weekly external mock             :crit, b2, 10, 30
+  Frontend micro-track             :b3, 10, 30
 ```
+
+- **Weeks 3–8 (~40–60h):** finish the NeetCode 150 roadmap (adds intervals, stacks, linked lists, heaps, graphs, greedy, 1D DP). One external mock per week. Keep the Redo Loop running the whole time.
+- **Graduation bar:** unseen Medium in 20–25 minutes, narrated, with complexity stated and follow-ups handled.
+- **Final 1–3 weeks before a specific company's loop:** buy **LeetCode Premium** ($35/mo) for company-tagged questions sorted by frequency; read recent Glassdoor/Blind reports for that exact team. Cancel after.
+- **Ask your recruiter two questions:** which assessment platform (HackerRank/CodeSignal/CoderPad — practice on that exact engine, since 60–80% of rejections happen at the OA stage), and what the AI-tooling policy is (Amazon disqualifies; Anthropic bans; Meta is piloting an AI-*enabled* round).
+
+## The Frontend Micro-Track — NEW (30 min, 2×/week, runs parallel to everything)
+
+Your seniority is the asset; DSA is the gate. Frontend loops in 2026 include machine-coding rounds this plan's sprints don't touch:
+
+- **JS utilities** (GreatFrontend, free tier): debounce, throttle, `Promise.all`, deep clone, `Array.prototype` polyfills.
+- **One machine-coding component per week:** autocomplete, modal, tabs, or data table — built live, narrated, with empty/loading/error states and basic a11y (you already know this part cold — it's your edge).
+- This is the same method as the main plan: pattern → template → redo. You already have the muscle.
+
+## Daily Checklist — The 10-Day Schedule
 
 | Day | Hours | Focus | Problems |
 |-----|-------|-------|----------|
-| 1 | 2h | Hash Maps | Two Sum, Valid Anagram, Contains Duplicate |
+| 1 | 2h | Hash Maps (+ ThePrimeagen: arrays/hashing) | Two Sum, Valid Anagram, Contains Duplicate |
 | 2 | 2h | Two Pointers | Valid Palindrome, Two Sum II, Container With Most Water |
-| 3 | 2h | Monovariants | Best Time to Buy and Sell Stock, Maximum Subarray |
-| 4 | 2h | Sliding Window | Longest Substring Without Repeating Characters |
+| 3 | 2h | Sliding Window / Monovariants | Best Time to Buy & Sell Stock, Longest Substring Without Repeating Chars |
+| 4 | 2h | **Binary Search (NEW)** | Binary Search, Search in Rotated Sorted Array |
 | 5 | 2h | Tree DFS | Max Depth, Invert Binary Tree, Same Tree |
 | 6 | 2h | Tree BFS + Backtracking | Level Order Traversal, Permutations, Combinations |
-| 7–10 | 8h | **Timer Drill** | As many Easy/Mediums as possible, narrated out loud |
+| 7 | 2h | Timer drills + **first redo session** (Days 1–3 failures) | Grind 75 / NeetCode picks |
+| 8 | 2h | Timer drills + **external mock #1** | + 30 min frontend micro-track |
+| 9 | 2h | Timer drills + redo (Days 4–6 failures) | + 30 min frontend micro-track |
+| 10 | 2h | Timer drills + **external mock #2** | Full-protocol narrated run |
 
-- **Day 1:** Run the full 8-step protocol on Two Sum — it becomes your reference for how every future problem should feel.
-- **Day 5:** Practice Knuth's "visit" framing — define the visit, pick the order.
-- **Day 6:** Begin your FGCC template file today.
-- **Days 7–10:** Narrate out loud the whole time (Khamies's communication factor).
+**Daily ritual (every day):** watch the matching ThePrimeagen section → run the 8-step protocol (+ Step 9) on every problem → narrate out loud → log failures to the Redo List.
 
-## Final Words of Encouragement
+## Final Words of Encouragement (Updated)
 
-- **From Zeitz:** _"The explorer is the person who is lost."_ Getting lost on a LeetCode problem doesn't mean you're a bad developer. It means you're doing math.
-- **From Backhouse:** _"Mastery of complexity is especially important."_ Don't hold the whole array in your head. Abstract it — what is the state? What is the invariant?
-- **From Kaufman:** _"The early parts of the skill acquisition process usually feel harder than they really are."_ Push through the first 5 hours. It will click.
-- **From Khamies:** Effectiveness beats raw effort. A systematic 20 hours with the protocol and templates will outperform 100 hours of unstructured grinding.
+- **From Zeitz:** _"The explorer is the person who is lost."_ Getting lost means you're doing math.
+- **From Backhouse:** Don't hold the whole array in your head. What is the state? What is the invariant?
+- **From Kaufman:** _"The early parts of skill acquisition usually feel harder than they really are."_
+- **From the data (interviewing.io, 100K interviews):** only ~20% of candidates perform consistently, and even strong candidates fail single interviews ~22% of the time. A rejection is a sample, not a verdict. Volume of *mocks* predicted success better than technical score.
 - **From Knuth:** _"An algorithm must be seen to be believed."_ Trace it by hand. Then — and only then — trust it.
+- **From 2026:** they will ask you to explain yourself. That's not a threat to you — it's your home turf. You've been explaining code to humans for 7 years.
 
 ---
 
-You have built complex frontend architectures. You can absolutely learn to invert a binary tree. Set your timer. Get lost. Have fun.
+_Set your timer. Get lost. Redo what beat you. Have fun._
+
+_v2 sources: full evidence, citations, and resource pricing in `algorithm-interview-resources.md`; raw research in `research/` (10 dimension reports, cross-verification, insights)._
