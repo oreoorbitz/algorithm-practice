@@ -2,6 +2,8 @@
 
 Five 20-hour sprints. 2 hours a day, 10 days per sprint. Every problem listed is free on LeetCode. Language: JavaScript/TypeScript throughout.
 
+A parallel **JS Performance Specialization Track** runs underneath — Modules 1–3 alongside Sprints 1–3, Modules 4–5 as post-application master's study — turning the algorithm training into engine-level frontend performance expertise plus low-level fluency, with five portfolio artifacts. It's at the bottom of this file.
+
 ## The Rules (apply to every sprint, every day)
 
 **The Protocol — run it on every problem, in order:**
@@ -296,7 +298,144 @@ The strictest mock you can arrange. Afterward, write your own debrief: strongest
 
 ---
 
+## JS Performance Specialization Track (parallel, ~45 min twice a week)
+
+You already own the prioritization layer (what loads when). This track takes you one level down: how engines execute your code, so every module is as fast as it can be. **Modules 1–3 run alongside Sprints 1–3** (45 min twice a week) and each ends with a portfolio artifact. **Modules 4–5 are the master's study — start them after you're comfortable with algorithms and have begun applying for jobs.** Those artifacts (public benchmark case studies) are how you stand out: almost nobody in frontend can argue from engine internals *and* show measurements.
+
+**The full performance model — four axes, not two:**
+1. **Code size** → cold-load cost (parse, compile, network).
+2. **Time complexity** → how work scales with input size.
+3. **Memory & allocation** → GC pauses. You pay for survivors and allocation *rate*, not short-lived objects. This is the axis most frontend devs ignore, and it's often what eats the 16ms frame budget.
+4. **Engine constant factors** → how V8/JavaScriptCore actually execute your code. A O(n) loop can be 50× slower than another O(n) loop depending on shapes, array kinds, and deopts. This module is about seeing that layer.
+
+### Module 1 (during Sprint 1) — Read Code the Way the Engine Does
+
+Concepts:
+- V8 tiers code up as it runs: interpreter → baseline JIT → optimizing JIT. JavaScriptCore has its own tier ladder with different thresholds and heuristics. Your "same" code runs differently across browsers because the optimizers speculate differently.
+- Optimizers speculate on **stability**: objects with a consistent shape ("hidden class") get fast property access; arrays with consistent element types get fast indexed access. Break stability and the engine throws away its optimized code (deopt).
+- The megamorphic cliff: a function that sees 1 shape is fastest; 2–4 shapes slower; 5+ shapes falls off the cliff. Hot functions that touch many object shapes stay slow forever.
+- Killers: `delete` on objects (forces dictionary mode), adding properties conditionally after creation, inconsistent property order in constructors, mixed-type or holey arrays.
+
+Exercises:
+- Run Node with `--trace-deopt` on a demo: write a constructor that adds a property conditionally, call it in a hot loop, watch the deopt fire. Then initialize all properties in the constructor and watch it disappear.
+- Write a hot function called with 5 differently-shaped objects. Then split it into per-shape call sites. Compare with `performance.now()` after warmup.
+- Repeat one experiment in Safari. Note where results diverge — that's the cross-engine instinct you're building.
+
+Artifact 1: a short writeup — "I made a hot function N× faster by changing nothing but object shape" — with traces.
+
+### Module 2 (during Sprint 2) — Data Structure Choice as Engineering Decision
+
+Concepts (rules that survive benchmarking):
+- Membership checks: `array.includes` is O(n); `Set.has` is ~O(1). But building the Set costs O(n) — so a Set wins for *repeated* lookups on a *growing* collection, not for one lookup. Small arrays are deceptively fast (constant factors, cache locality) — measure before converting.
+- `Map` beats plain objects on insertion, iteration, and `delete`; objects win for fixed-shape records with string keys known at write time.
+- `push`/`pop` are O(1); `shift`/`unshift` are O(n). Even push+reverse beats unshift. (You already know why from Sprint 1 — now you've measured it.)
+- `delete obj.prop` poisons the object's shape → dictionary mode. Set to `undefined` instead, or use a Map.
+- String building: modern engines made `+=` as fast as array-join. The old "always join" rule is dead folklore — this is why you re-verify received wisdom.
+- TypedArrays: the win is guaranteed layout and no shape speculation, not raw speed over a well-behaved array.
+
+Exercises:
+- Build a **benchmark harness you trust**: warmup iterations, return values consumed (or dead-code elimination eats your measurement), varied input data (uniform data lets the JIT specialize unrealistically), multiple runs, median not mean. This harness is the foundation of every future artifact.
+- Benchmark: Set vs Array membership at n = 10, 100, 10k, 1M — find where the crossover *actually* is on your machine, in both V8 and JSC.
+- Benchmark: `delete` vs `undefined` vs Map deletion in a hot loop.
+
+Artifact 2: "Set vs Array: the crossover isn't where the folklore says" — with your harness published.
+
+### Module 3 (during Sprint 3) — The DOM Is a Data Structure
+
+Concepts:
+- `getElementById`/`getElementsBy*` are 2–10× faster than `querySelectorAll`: they're hash lookups or lazy **live** collections; qSA parses a selector and builds a static NodeList eagerly.
+- The live-collection footgun: `HTMLCollection.length` re-queries on every access, and mutating matching classes mid-loop can blow up iteration cost massively. If you use live collections, hoist `length` — or better, snapshot.
+- `TreeWalker` is native and fast for full-descendant walks, with early exit and subtree pruning (`FILTER_REJECT`) and no array materialization. Hand-written JS recursion wins when your match logic isn't expressible as a selector or you need custom state while walking. Choose by *logic shape*, not by assumed speed.
+- The real DOM complexity problem isn't selection — it's **layout**: one forced synchronous layout on a large DOM costs more than thousands of selector calls. Interleaving layout reads (`offsetHeight`, `getBoundingClientRect`) with writes is O(n) layouts = O(n²) behavior. Batch reads, then writes. This is time-complexity thinking applied to rendering — your interview training paying off directly.
+- Cache query results you'll reuse; attach per-node metadata with `WeakMap` (not expandos or `Map`) to avoid detached-DOM memory leaks.
+
+Exercises:
+- Build a 10k-node DOM. Benchmark qSA vs getElementsBy* vs TreeWalker vs manual recursion for (a) collect-all, (b) find-first-with-early-exit, (c) non-selector matching. You'll find the answer is "it depends on the operation shape" — that's the expertise.
+- Deliberately create layout thrashing in a loop; measure it; fix it by batching; measure again. Compare the delta to every selector micro-benchmark you just ran. Feel the two orders of magnitude.
+
+Artifact 3: "Your selector API doesn't matter (and when it does)" — the thrashing-vs-selector comparison is a genuinely counterintuitive, shareable result.
+
+---
+
+# Master's Study (post-application)
+
+Start these once you're comfortable with algorithms and applying for jobs. Modules 1–3 taught you to *see* the engine layer; Modules 4–5 make you dangerous in it. Slow, steady pace — this is background study alongside a job hunt, not a sprint.
+
+### Module 4 (master's study) — Low-Level Fluency: When JS Isn't Enough, and What to Do About It
+
+There's no point judging when JS is enough if you can't act on the answer. This module fuses the decision framework with the ability to execute it: learn a low-level language that imports into JS, then use the framework to decide when to bother.
+
+**The learning path (in order):**
+
+1. **AssemblyScript — the warm-up (2–3 weekends).** TypeScript-flavored syntax that compiles to WebAssembly. The language is nearly free for you; the point is learning the hard *concepts* — linear memory, the JS↔WASM boundary, why marshaling dominates, which data shapes cross well — without learning new syntax at the same time. Know its limits: it's not real TypeScript, the ecosystem is small, and its performance ceiling sits below Rust/Zig-compiled WASM. Flight school, not the destination.
+2. **Rust via napi-rs — the main course (real months, not weeks).** The borrow checker is a genuinely different mental model; budget for it. It's worth it because the performance-critical corner of your own ecosystem already lives here: SWC, Biome, Rspack, LightningCSS are Rust with JS bindings, reporting 17–100× on compiler workloads (no GC, safe parallelism, memory control). "Rust for JS tooling" is a resume keyword; AssemblyScript and Zig are not.
+3. **Zig — only if you discover you love low-level work.** The easiest *real* systems language: small, fully explicit, tiny WASM binaries, best-in-class C interop, powers Bun. Pre-1.0 with thin docs. Optional side quest, not on the critical path.
+4. **Skip C/C++** unless a specific job demands it — Zig covers the same mental model with fewer footguns.
+
+**The decision framework (now backed by ability):**
+- The boundary is the cost: a JS↔native call is nanoseconds, but **data marshaling is not** — chatty crossings with big payloads can make native slower than staying in JS. Rule: one big call, zero-copy data (Buffers/TypedArrays), never back-and-forth.
+- WASM: portable and sandboxed (the only option in browsers/isolates), roughly 2–4× over JS for compute, loses on data-copy-heavy workloads.
+- `worker_threads`: for CPU-bound pure JS, a pool of long-lived workers (~10MB + ~5ms startup each) often beats going native — cores before languages.
+- **Go-native triggers (all must hold):** the JS implementation is ≥10× slower than the achievable native floor AND the task is ≥1–10ms of compute per crossing AND you expect ≥5–10× end-to-end gain to repay the maintenance tax. **The tax:** prebuilt binaries per platform, build-pipeline complexity, a second language your team must review, harder on-call debugging.
+- Porting guarantees nothing: published rewrites of the same algorithm in Rust range from 1.15× to 115× depending on how well the native version exploits parallelism and memory layout.
+
+Exercises (staged with the learning path):
+- **Stage 1 (AssemblyScript):** port one numeric hot function (e.g., a string-similarity or image-scoring kernel) to AssemblyScript/WASM. Measure the crossing cost with tiny vs big payloads until you *feel* the marshaling cliff.
+- **Stage 2 (Rust):** take the CPU-heavy JS task you benchmarked earlier and port it with napi-rs, one big zero-copy call. Compare three implementations honestly: pure JS, worker-thread pool, Rust addon. Publish the numbers.
+- **Stage 3 (synthesis):** write the go/no-go analysis for a *second* task you chose NOT to port, using the trigger rules and the maintenance tax. Deciding not to port, with numbers, is the senior-engineer move.
+
+Artifact 4: "I ported the same hot function to WASM and Rust so you don't have to guess" — three implementations, one cost model, measured. Compiler/toolchain teams and performance roles both read this as hire-ready.
+
+### Module 5 (master's study) — Micro vs Macro: The Judgment Layer
+
+Concepts:
+- **Measure field data, not vibes.** Core Web Vitals are measured at p75 of real users (LCP ≤ 2.5s, INP ≤ 200ms, CLS ≤ 0.1). Lab tools are for diagnosis and CI, not verdicts. Percentiles over averages: p95 is the user you're accidentally breaking.
+- Perception thresholds: 16ms frame budget, ~100ms feels instant, ~50ms input budget per task. An optimization users can't perceive is a cost (code complexity) with no benefit — unless it saves infrastructure money.
+- Microbenchmarks lie by default: dead-code elimination, missing warmup, uniform test data. Verify in-app or don't trust the number.
+- The money bridge: published retail studies tie 0.1s improvements to meaningful conversion lifts — directionally, treat as correlational, but learn to make the argument. Frame your work in revenue or infra dollars and you stop being "the performance person" and become "the person who makes money."
+- Hall of shame (optimizations that measured as useless or harmful): string-building via array-join, blanket object pooling (engines improved; Netflix removed theirs), micro-tuning cold code, engine "benchmark special" tricks that gamed synthetic benchmarks while real code got slower. Every one of these was someone confident without a measurement.
+
+Exercises:
+- Take one real page. Collect RUM-style data (PerformanceObserver, long tasks, INP events). Rank every performance issue by estimated user impact at p75/p95. Fix only #1. Measure the delta. Write down what you *didn't* fix and why — that list is the skill.
+- Apply the four-axis model to your existing prioritization work: for each resource you lazy-load or preload, note which axis it optimizes. Gaps you find are your next blog posts.
+
+Artifact 5: the capstone — a full case study from your client work: baseline → prioritization layer → engine-level module optimization → measured p75/p95 impact → revenue framing. This is the standing-out artifact. Senior frontend roles and frontier-lab tooling teams both read this as "measures first, optimizes second, communicates in business terms."
+
+### Module 6 (master's thesis) — A Purpose-Built QuickJS Runtime for a Templating Language
+
+The capstone of the master's study. Constraint you set for yourself: **built entirely by hand — no AI assistance, documentation and search engines only.** If you're at this module without a job yet, this project is the proof you don't need one to do elite work.
+
+**Thesis statement:** templating engines that let users supply logic (Liquid, Nunjucks, shortcode systems, theme platforms) face a permanent tension — user expressions must be *executed* (they're code) but can't be *trusted* with the host process. The standard answers are crippled expression languages (safe, weak) or heavy sandboxing (strong, expensive). The unexplored middle: a small, embeddable JS engine — QuickJS — stripped and dedicated to one templating language, with a JS bridge library that lets developers pass real JS syntax into the sandbox to extend the template language itself. Safe by construction (memory and instruction limits at the engine level), fast by specialization (no general-purpose runtime overhead), expressive by design (extensions are actual JS, not a parallel mini-language).
+
+**Why this thesis specifically:**
+- It exercises everything the master's study built: engine internals (Module 1), data-structure and marshaling judgment (Modules 2, 4), native integration in Rust or C (Module 4's napi-rs path is the natural bridge), and the measurement discipline to prove it (Module 5).
+- It sits exactly on your specialty's frontier: theme/templating platforms (e-commerce included) all hit this sandbox-vs-expressiveness wall, and almost no frontend engineers can work at the engine-embedding layer.
+- Hand-coding it without AI is itself the credential — verifiable in the commit history, and a story that lands in any interview.
+
+**High-level milestones (no implementation details — you'll write those yourself):**
+1. Embed QuickJS and prove you can execute JS in a constrained sandbox with memory and instruction caps.
+2. Design the minimal templating language: syntax, compilation target into the sandbox, error surfaces.
+3. Build the JS bridge library: the public API by which developers pass JS syntax into the runtime to register extensions — safe, typed, documented.
+4. Harden the sandbox: what escapes, what leaks, what a malicious extension can do — enumerate and close.
+5. Benchmark against the honest baselines (existing sandboxed and non-sandboxed approaches) across your four axes: cold load, runtime complexity, memory behavior, boundary cost.
+6. Write it up as the thesis: design rationale, tradeoffs, measurements, and what you'd do differently.
+
+**Exit criteria:** a working runtime + bridge library with real benchmarks, one demo templating integration (a small theme or static site using it), and the thesis writeup.
+
+Artifact 6: the thesis and the repo. Five case studies got you interviews; this gets you remembered.
+
+---
+
+### Track rules
+- **Never optimize without a before/after measurement.** The harness from Module 2 is sacred.
+- **Verify folklore personally.** Half of what you "know" about JS performance is engine-version-dependent and expires. Your edge is that you check.
+- **Every module ships an artifact.** Five public case studies > any certification.
+
+---
+
 ## Maintenance (after Hour 100, until interviews)
+
+
 
 - 3 problems a week from the Redo List or weak patterns — 30 minutes each, narrated.
 - 1 external mock every 2 weeks.
