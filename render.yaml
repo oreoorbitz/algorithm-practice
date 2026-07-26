@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: algorithm-practice
+    runtime: static
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
